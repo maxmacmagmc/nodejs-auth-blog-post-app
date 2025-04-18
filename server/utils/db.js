@@ -1,9 +1,12 @@
 import { MongoClient } from "mongodb";
 
-const connectionString = "mongodb://localhost:27017";
-
-export const client = new MongoClient(connectionString, {
+const connectionString = "mongodb://127.0.0.1:27017";
+const client = new MongoClient(connectionString, {
   useUnifiedTopology: true,
 });
 
-export const db = client.db("practice-mongo");
+await client.connect();
+const db = client.db("practice-mongo");
+
+
+export { client, db }; 
