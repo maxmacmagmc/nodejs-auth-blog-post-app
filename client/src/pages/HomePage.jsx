@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import usePosts from "../hooks/usePosts";
 import getPublishedDate from "../utils/getPublishedDate";
+import { useAuth } from "../contexts/AuthContext"; // ✅ เพิ่ม useAuth
 
 function HomePage() {
   const navigate = useNavigate();
+  const { logout } = useAuth(); // ✅ ใช้งาน logout จาก context
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -27,12 +29,16 @@ function HomePage() {
         >
           Create Post
         </button>
-        {/* 
-           // 🐨 Todo: Exercise #7
-          //  นำ Function `logout` จาก AuthContext มา Execute ใน Prop `onClick`
-        */}
-        <button>Logout</button>
+        <button
+          onClick={() => {
+            logout();
+            navigate("/login"); // ✅ กลับไปหน้า login หลัง logout
+          }}
+        >
+          Logout
+        </button>
       </div>
+
       <div className="search-box-container">
         <div className="search-box">
           <label>
@@ -66,6 +72,7 @@ function HomePage() {
           </label>
         </div>
       </div>
+
       <div className="board">
         {!posts.length && (
           <div className="no-blog-posts-container">
@@ -92,7 +99,6 @@ function HomePage() {
                   Edit post
                 </button>
               </div>
-
               <button
                 className="delete-button"
                 onClick={() => deletePost(post._id)}
@@ -102,22 +108,21 @@ function HomePage() {
             </div>
           );
         })}
-        {isError ? <h1>Request failed</h1> : null}
-        {isLoading ? <h1>Loading ....</h1> : null}
+        {isError && <h1>Request failed</h1>}
+        {isLoading && <h1>Loading ....</h1>}
       </div>
 
       <div className="pagination">
-        {page > 1 ? (
+        {page > 1 && (
           <button className="previous-button" onClick={() => setPage(page - 1)}>
             Previous
           </button>
-        ) : null}
-
-        {page !== totalPages ? (
+        )}
+        {page !== totalPages && (
           <button className="next-button" onClick={() => setPage(page + 1)}>
             Next
           </button>
-        ) : null}
+        )}
       </div>
       <div className="pages">
         {page} / {totalPages}
