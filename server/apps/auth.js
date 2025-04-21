@@ -15,6 +15,13 @@ authRouter.post("/register", async (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
     };
+    if (!user.username || !user.password) {
+      return res.status(400).json({ message: "Username and password are required" });
+    }
+    const existingUser = await db.collection("users").findOne({ username: user.username });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
@@ -51,8 +58,8 @@ authRouter.post("/login", async (req, res) => {
                 id: user._id,
                 username: user.username,
             },
-            process.env.SECRET_KEY,
-            { expiresIn: "1h" }
+            process.env.SECRET_KEY || "default_secret_key",
+            { expiresIn: "600000" }
         );
 
         return res.status(200).json({

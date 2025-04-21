@@ -20,7 +20,7 @@ const usePosts = () => {
       setIsError(false);
       setIsLoading(true);
       const results = await axios.get(
-        `http://localhost:4000/posts?${params.toString()}`
+        `http://localhost:4001/posts?${params.toString()}`
       );
       setPosts(results.data.data);
       setTotalPages(results.data.total_pages);
@@ -35,7 +35,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.delete(`http://localhost:4000/posts/${postId}`);
+      await axios.delete(`http://localhost:4001/posts/${postId}`);
       const newPosts = posts.filter((post) => {
         return post._id !== postId;
       });
@@ -51,7 +51,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      const result = await axios.get(`http://localhost:4000/posts/${postId}`);
+      const result = await axios.get(`http://localhost:4001/posts/${postId}`);
       setPost(result.data.data);
       setIsLoading(false);
     } catch (error) {
@@ -64,7 +64,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.post(`http://localhost:4000/posts`, data);
+      await axios.post(`http://localhost:4001/posts`, data);
       setIsLoading(false);
       navigate("/");
     } catch (error) {
@@ -77,7 +77,7 @@ const usePosts = () => {
     try {
       setIsError(false);
       setIsLoading(true);
-      await axios.put(`http://localhost:4000/posts/${postId}`, data);
+      await axios.put(`http://localhost:4001/posts/${postId}`, data);
       setIsLoading(false);
       navigate("/");
     } catch (error) {
